@@ -1,0 +1,129 @@
+use Atividade_views;
+
+
+CREATE VIEW 1-Dados AS 
+SELECT Aluno.nome as Nome_aluno, Disciplina.Nome as Nome_Disciplina, Curso.Nome as Curso_Nome
+FROM Aluno
+INNER JOIN Matricula  ON Aluno.id_aluno = Matricula.id_aluno
+INNER JOIN Disciplina ON Matricula.id_disciplina = Disciplina.id_disciplina
+INNER JOIN Curso ON Disciplina.id_curso = Curso.id_curso;
+
+CREATE VIEW 2-Dados AS 
+SELECT disciplina.nome AS nome_disciplina, COUNT(aluno.id_aluno) AS numero_de_alunos
+FROM aluno
+INNER JOIN matricula ON aluno.id_aluno = matricula.id_aluno
+INNER JOIN disciplina ON matricula.id_disciplina = disciplina.id_disciplina
+INNER JOIN curso ON disciplina.id_curso = curso.id_curso
+GROUP BY disciplina.nome
+ORDER BY nome_disciplina;
+
+CREATE VIEW 3-Dados AS 
+SELECT aluno.nome as alunos , disciplina.nome as discplinas ,  matricula.status as status
+FROM aluno
+INNER JOIN matricula ON aluno.id_aluno = matricula.id_aluno
+INNER JOIN disciplina ON matricula.id_disciplina = disciplina.id_disciplina;
+
+CREATE VIEW 4-Dados AS 
+SELECT professor.nome AS nome_professores, disciplina.nome as disciplina, turma. horario as horario_professores
+FROM professor
+INNER JOIN turma ON professor.id_professor = turma.id_professor
+INNER JOIN disciplina ON turma.id_disciplina = disciplina.id_disciplina;
+
+CREATE VIEW 5-Dados AS 
+SELECT nome,  COUNT(data_nascimento)  
+FROM aluno
+WHERE data_nascimento>20
+GROUP BY data_nascimento
+ORDER BY data_nascimento;
+
+CREATE VIEW 6-Dados AS 
+SELECT curso.nome, COUNT(disciplina.id_curso) AS total_disciplinas, curso.carga_horaria, curso.id_curso
+FROM curso
+INNER JOIN disciplina ON disciplina.id_curso = curso.id_curso
+GROUP BY curso.nome, curso.carga_horaria, curso.id_curso
+ORDER BY curso.id_curso;
+
+CREATE VIEW 7-Dados AS
+SELECT nome,especialidade
+from professor;
+
+CREATE VIEW 8-Dados AS
+SELECT aluno.nome, COUNT(disciplina.id_disciplina) AS total_disciplinas
+FROM aluno
+INNER JOIN matricula ON aluno.id_aluno = matricula.id_aluno
+INNER JOIN disciplina ON matricula.id_disciplina = disciplina.id_disciplina
+GROUP BY aluno.nome
+ORDER BY aluno.nome;
+
+CREATE VIEW 9-Dados AS
+SELECT aluno.nome,  COUNT(disciplina.id_disciplina)
+FROM aluno
+INNER JOIN matricula ON aluno.id_aluno = matricula.id_aluno
+INNER JOIN disciplina ON matricula.id_disciplina = disciplina.id_disciplina
+WHERE matricula.status = "Concluído"
+GROUP BY aluno.nome
+ORDER BY aluno.nome;
+
+CREATE VIEW 10-Dados AS
+SELECT * FROM turma
+WHERE semestre = '2024.1';
+
+CREATE VIEW 11-Dados AS
+SELECT aluno.nome, matricula.status as matricula
+FROM aluno
+INNER JOIN matricula 
+ON aluno.id_aluno = matricula.id_aluno
+WHERE matricula.status = "Trancado";
+
+CREATE VIEW 12-Dados AS
+SELECT disciplina.nome , curso.id_curso
+FROM aluno
+INNER JOIN matricula 
+ON aluno.id_aluno = matricula.id_aluno
+INNER JOIN disciplina ON matricula.id_disciplina = disciplina.id_disciplina
+INNER JOIN curso ON disciplina.id_curso = curso.id_curso
+where curso.id_curso is null ;
+
+CREATE VIEW 13-Dados AS
+SELECT matricula.status, COUNT(aluno.id_aluno) AS quantidade_alunos
+FROM matricula
+INNER JOIN aluno ON matricula.id_aluno = aluno.id_aluno
+GROUP BY matricula.status;
+
+CREATE VIEW 14-Dados AS
+SELECT professor.especialidade, COUNT(professor.id_professor) AS quantidade_professores
+FROM professor
+GROUP BY professor.especialidade;
+
+CREATE VIEW 15-Dados AS
+SELECT aluno.nome, 
+YEAR(CURDATE()) - YEAR(aluno.data_nascimento) AS idade FROM aluno;
+
+CREATE VIEW 16-Dados AS
+SELECT aluno.nome, MAX(matricula.data_matricula) AS data_ultima_matricula
+FROM aluno
+INNER JOIN matricula ON aluno.id_aluno = matricula.id_aluno
+GROUP BY aluno.nome;
+
+CREATE VIEW 17-Dados AS
+SELECT disciplina.nome
+FROM disciplina
+INNER JOIN curso ON disciplina.id_curso = curso.id_curso
+WHERE curso.nome = 'Engenharia de Software';
+
+CREATE VIEW 18-Dados AS
+SELECT professor.id_professor, professor.nome
+FROM professor
+LEFT JOIN turma ON professor.id_professor = turma.id_professor
+WHERE turma.id_turma IS NULL;
+
+CREATE VIEW 19-Dados AS
+SELECT aluno.nome, aluno.cpf, aluno.email
+FROM aluno;
+
+CREATE VIEW 20-Dados AS
+SELECT professor.id_professor, professor.nome, COUNT(disciplina.id_disciplina) AS total_disciplinas
+FROM professor
+LEFT JOIN turma ON professor.id_professor = turma.id_professor
+LEFT JOIN disciplina ON turma.id_disciplina = disciplina.id_disciplina
+GROUP BY professor.id_professor, professor.nome;
